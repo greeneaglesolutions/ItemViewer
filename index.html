@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/ico" href="img/GES_Logo.ico" />
+    <title>CompactScada Item Table</title>
+
+    <link rel="stylesheet" href="css/pure-min.css">
+    <link rel="stylesheet" href="css/grids-responsive-min.css">
+    <script data-main="js/main" src="js/require.js"></script>
+</head>
+<body>
+    <div id="table-container" style="margin: 20px 50px"></div>
+    <script id="table-template" type="text/html">
+<form class="pure-form pure-form-aligned" onsubmit="return false">
+    <div class="pure-g">
+    <div class="pure-u-1 pure-u-md-1-2">
+        <fieldset>
+            <legend>CompactScada</legend>
+            <div class="pure-control-group">
+                <label for="url-input">CompactScada URL</label>
+                <input id="url-input" type="text" value="{{url}}"
+                       on-change="urlEdit">
+            </div>
+            <div class="pure-control-group">
+                <label for="interval-input">Cycle length (ms)</label>
+                <input id="interval-input" type="text" value="{{interval}}"
+                       on-change="intervalEdit">
+            </div>        
+            <div class="pure-control-group">
+                <label for="query-input">Query Pattern</label>
+                <input id="query-input" type="text" value="{{queryPattern}}"
+                       on-change="queryEdit">
+            </div>        
+        </fieldset>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-2">
+        <fieldset>
+            <legend>Signal Generator</legend>
+            <div class="pure-control-group">
+                <label for="high-limit-input">High limit</label>
+                <input id="high-limit-input" type="text" value="{{generator.highLimit}}">
+            </div>
+            <div class="pure-control-group">
+                <label for="low-limit-input">Low limit</label>
+                <input id="low-limit-input" type="text" value="{{generator.lowLimit}}">
+            </div>        
+            <div class="pure-control-group">
+                <label for="increment-input">Increment</label>
+                <input id="increment-input" type="text" value="{{generator.increment}}">
+            </div>        
+        </fieldset>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-2">
+        <fieldset>
+            <legend>Signal Variation</legend>
+            <div class="pure-control-group">
+                <label for="initial-value-input">Initial Value</label>
+                <input id="initial-value-input" type="text" value="{{variation.initialValue}}">
+            </div>
+            <div class="pure-control-group">
+                <label for="variation-percentage-input">Variation Percentage(%)</label>
+                <input id="variation-percentage-input" type="text" value="{{variation.variation}}">
+            </div>       
+                    
+        </fieldset>
+    </div>
+    </div>
+    </form>
+<table class="pure-table">
+    <style scoped>
+    .button-active {
+        background-color: red;
+    }
+    </style>
+    <thead>
+        <tr>
+            <th on-click="sort:'itemName','up'">Name</th>
+            <th on-click="sort:'value','down'">Value</th>
+            <th on-click="sort:'timestamp','down'">Timestamp</th>
+            <th on-click="sort:'quality','down'">Quality</th>
+            <th>Generator</th>
+            <th>Var Perc</th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        {{#each sort(items, sortColumn, sortUp) }}
+        <tr>
+            <td>
+                {{itemName}}
+            </td>
+            <td>
+                <input value="{{bindValue}}"
+                       on-keyup="itemEdit:{{itemName}}" 
+                       on-focus="itemFocus:{{itemName}}"
+                       on-blur="itemBlur:{{itemName}}">
+            </td>
+            <td title="{{timestamp?timestamp.toLocaleString():''}}">
+                {{timestamp?timestamp.toLocaleTimeString():''}}
+                </td>
+            <td>
+                {{quality}}
+            </td>
+            <td>
+                <button on-click="itemGenerate:{{itemName}}" 
+                        class="pure-button {{generatorId?'button-active':''}}">Active</button>
+            </td>
+            
+            <td>
+                <button on-click="variationPercentage:{{itemName}}" 
+                        class="pure-button {{varPercentage?'button-active':''}}">Var Perc</button>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+    </script>    
+</body>
+</html>
